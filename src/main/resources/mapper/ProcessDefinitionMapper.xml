@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fk.activiti.mapper.ProcessDefinitionMapper">
+    <resultMap id="WfProcessDefinitionDTOResultMap" type="com.fk.activiti.dto.WfProcessDefinitionDTO">
+        <id column="ID_" property="id" jdbcType="VARCHAR"/>
+        <result column="PROC_DEF_ID_" property="procDefId" jdbcType="VARCHAR"/>
+        <result column="CATEGORY_" property="category" jdbcType="VARCHAR"/>
+        <result column="NAME_" property="name" jdbcType="VARCHAR"/>
+        <result column="KEY_" property="key" jdbcType="VARCHAR"/>
+        <result column="DESCRIPTION_" property="description" jdbcType="VARCHAR"/>
+        <result column="MODEL_ID_" property="modelId" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME_" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="ENABLED_STATUS_" property="enabledStatus" jdbcType="VARCHAR"/>
+        <result column="PUBLISH_STATUS_" property="publishStatus" jdbcType="VARCHAR"/>
+        <result column="CATEGORY_NAME_" property="categoryName" jdbcType="VARCHAR"/>
+        <result column="draftId" property="draftId" jdbcType="VARCHAR"/>
+        <result column="EDITOR_SOURCE_VALUE_ID_" property="editorSourceValueId" jdbcType="VARCHAR"/>
+
+        <result column="version_no" property="versionNo" jdbcType="VARCHAR"/>
+        <result column="is_main" property="isMain" jdbcType="VARCHAR"/>
+        <result column="explanation" property="explanation" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="WfProcessDefinitionResultMap" type="com.fk.activiti.model.WfProcessDefinition">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="model_id" property="modelId" jdbcType="VARCHAR"/>
+        <result column="proc_def_id" property="procDefId" jdbcType="VARCHAR"/>
+        <result column="version_no" property="versionNo" jdbcType="VARCHAR"/>
+        <result column="key_" property="key" jdbcType="VARCHAR"/>
+        <result column="is_main" property="isMain" jdbcType="VARCHAR"/>
+        <result column="explanation" property="explanation" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="checkProcessNameRepeat" parameterType="map" resultType="int">
+        select count(1)
+        FROM (
+        select COALESCE(P.NAME_,M.NAME_) as name_,COALESCE(P.KEY_,M.KEY_) as key_
+        FROM ACT_RE_MODEL M
+        LEFT JOIN ACT_RE_PROCDEF P ON P.DEPLOYMENT_ID_=M.DEPLOYMENT_ID_
+        ) t
+        where t.name_ = #{processName} and t.key_ != #{processKey}
+    </select>
+
+    <update id="updateProcessDefName" parameterType="com.fk.activiti.dto.WfProcessDefinitionDTO">
+        UPDATE ACT_RE_PROCDEF
+        SET NAME_ = #{name}
+        WHERE ID_= #{procDefId}
+    </update>
+
+
+    <select id="findOne" parameterType="com.fk.activiti.model.WfProcessDefinition" resultMap="WfProcessDefinitionDTOResultMap">
+        <include refid="selectField"/>
+        from wf_process_definition d
+        left join wf_process_definition draft on d.key_=draft.key_ and draft.proc_def_id is null and draft.version_no='0'
+        left join ACT_RE_MODEL m on d.model_id=m.ID_
+        left join ACT_RE_PROCDEF p on d.proc_def_id=p.ID_
+        <where>
+            <if test="id !=null and id!='' ">
+                AND d.id = #{id}
+            </if>
+            <if test="procDefId !=null and procDefId!='' ">
+                AND p.ID_ = #{procDefId}
+            </if>
+            <if test="modelId !=null and modelId!='' ">
+                AND m.ID_ = #{modelId}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="findOne1" parameterType="com.fk.activiti.model.WfProcessDefinition" resultMap="WfProcessDefinitionDTOResultMap">
+        select d.id as id_,d.version_no,d.PROC_DEF_ID as PROC_DEF_ID_
+        from wf_process_definition d
+        <where>
+            <if test="id !=null and id!='' ">
+                AND d.id = #{id}
+            </if>
+        </where>
+    </select>
+
+    <sql id="selectField">
+        select d.key_,case when p.name_ is null then m.NAME_ else p.name_ end as name_
+        ,m.META_INFO_ as DESCRIPTION_,d.version_no,m.CATEGORY_,
+        case when p.ID_ is null THEN '3' when p.suspension_state_=1 then '1' else '0' end as ENABLED_STATUS_,d.explanation,
+        case when p.ID_ is null THEN '0' ELSE '1' end AS PUBLISH_STATUS_,
+        draft.id as draftId,
+        d.id as ID_,p.ID_ as PROC_DEF_ID_,m.ID_ as MODEL_ID_,m.CREATE_TIME_,m.EDITOR_SOURCE_VALUE_ID_
+    </sql>
+</mapper>
