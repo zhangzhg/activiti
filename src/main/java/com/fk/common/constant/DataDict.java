@@ -689,7 +689,7 @@ public interface DataDict {
 	 * 流程定义-版本号
 	 */
 	 enum WfProcDefVersion{
-
+           PUBLISHED("1", "草稿"),
            DRAFT("0", "草稿");
 
            private final String code;

@@ -67,17 +67,6 @@
         </where>
     </select>
 
-
-    <select id="findOne1" parameterType="com.fk.activiti.model.WfProcessDefinition" resultMap="WfProcessDefinitionDTOResultMap">
-        select d.id as id_,d.version_no,d.PROC_DEF_ID as PROC_DEF_ID_
-        from wf_process_definition d
-        <where>
-            <if test="id !=null and id!='' ">
-                AND d.id = #{id}
-            </if>
-        </where>
-    </select>
-
     <sql id="selectField">
         select d.key_,case when p.name_ is null then m.NAME_ else p.name_ end as name_
         ,m.META_INFO_ as DESCRIPTION_,d.version_no,m.CATEGORY_,

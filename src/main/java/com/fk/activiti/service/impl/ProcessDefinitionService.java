@@ -64,6 +64,11 @@ public class ProcessDefinitionService implements IProcessDefinitionService {
     public WfProcessDefinition deploy(String id, String explanation) {
         // 找到已上传的流程定义信息
         WfProcessDefinition wfProcessDefinition = repository.findOne(id);
+        // 已发布不再发布
+        if (DataDict.WfProcDefVersion.PUBLISHED.toString().equals(wfProcessDefinition.getVersionNo())) {
+            return wfProcessDefinition;
+        }
+
         // 根据流程定义获取模型
         Model model = repositoryService.getModel(wfProcessDefinition.getModelId());
         // 设置名称
@@ -104,6 +109,7 @@ public class ProcessDefinitionService implements IProcessDefinitionService {
 
         wfProcessDefinition.setProcDefId(processDefinitionId);
         wfProcessDefinition.setExplanation(explanation);
+        wfProcessDefinition.setVersionNo(DataDict.WfProcDefVersion.PUBLISHED.toString());
         // 修改流程定义基本信息
         repository.save(wfProcessDefinition);
 
@@ -173,7 +179,7 @@ public class ProcessDefinitionService implements IProcessDefinitionService {
         }
 
         // 删除历史草稿
-        String version = deleteDraft(processKey) + 1;
+        deleteDraft(processKey);
 
         // Activiti的model存储,如果不保存直接根据文件发布，这个表会没有值
         Model activitiModel = repositoryService.newModel();
@@ -196,7 +202,6 @@ public class ProcessDefinitionService implements IProcessDefinitionService {
         WfProcessDefinition wfProcessDefinition = new WfProcessDefinition();
         wfProcessDefinition.setModelId(modelId);
         wfProcessDefinition.setKey(processKey);
-        wfProcessDefinition.setVersionNo(version);
         wfProcessDefinition.setIsMain(DataDict.WfProcDefIsMain.MAIN.toString());
         wfProcessDefinition.setVersionNo(DataDict.WfProcDefVersion.DRAFT.toString());
         wfProcessDefinition.setFileId(fileId);

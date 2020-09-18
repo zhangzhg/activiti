@@ -11,6 +11,4 @@ public interface ProcessDefinitionMapper {
     void updateProcessDefName(WfProcessDefinitionDTO params);
 
     WfProcessDefinitionDTO findOne(WfProcessDefinition def);
-
-    WfProcessDefinitionDTO findOne1(WfProcessDefinition def);
 }
