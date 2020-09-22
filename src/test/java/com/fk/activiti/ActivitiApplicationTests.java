@@ -1,13 +1,13 @@
 package com.fk.activiti;
 
-import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import org.junit.Test;
+
 class ActivitiApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
+
 	}
 
 }

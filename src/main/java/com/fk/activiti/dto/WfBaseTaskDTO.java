@@ -17,9 +17,6 @@ public class WfBaseTaskDTO {
     //意见代码  201同意 202不同意等
     private String opinion;
 
-    //转办用户、加签用户集合、协办用户、
-    private List<String> users;
-
     // 人工选择的下一环节处理人集合
     private List<TaskExecutor> selectAssigneeList;
     // 其他属性变量
@@ -55,14 +52,6 @@ public class WfBaseTaskDTO {
 
     public void setOpinion(String opinion) {
         this.opinion = opinion;
-    }
-
-    public List<String> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<String> users) {
-        this.users = users;
     }
 
     public String getDescription() {

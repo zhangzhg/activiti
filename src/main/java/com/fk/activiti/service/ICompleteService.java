@@ -3,8 +3,12 @@ package com.fk.activiti.service;
 import com.fk.activiti.domain.BaseBomModel;
 import org.activiti.engine.delegate.DelegateExecution;
 
-public interface ICompleteService {
-    boolean isComplete(DelegateExecution execution, String opinion);
+import java.util.List;
 
-    void afterEnd(BaseBomModel bomModel);
+public interface ICompleteService {
+    boolean isComplete(DelegateExecution execution);
+
+    void complete(BaseBomModel bomModel);
+
+    List<String> userList(DelegateExecution execution);
 }

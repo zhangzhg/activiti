@@ -13,12 +13,10 @@ import com.fk.common.constant.DataDict;
 import com.fk.common.exception.BusinessException;
 import com.fk.common.util.AssertUtils;
 import com.fk.common.util.StringUtils;
-import org.activiti.engine.ActivitiException;
-import org.activiti.engine.ActivitiObjectNotFoundException;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
+import org.activiti.engine.*;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +42,8 @@ public class WorkflowService implements IWorkflowService {
     RepositoryService repositoryService;
     @Autowired
     IProcessInstanceService processInstanceService;
+    @Autowired
+    TaskService taskService;
 
     @Override
     public BaseBomModel startProcess(BaseBomModel bomModel) throws Exception {
@@ -59,6 +59,7 @@ public class WorkflowService implements IWorkflowService {
     public BaseBomModel startProcess(BaseBomModel bomModel, Map<String, Object> variables) {
         AssertUtils.notNull(bomModel.getId(), "业务编号");
         AssertUtils.notNull(bomModel.getProcDefKey(), "流程定义");
+        AssertUtils.notNull(bomModel.getStartUserId(), "启动人员编号");
         logger.info("启动流程开始:id={};defKey={}", bomModel.getId(), bomModel.getProcDefKey());
         WfProcessInstance wfProcessInstance = setWfProcessInstance(bomModel);
         if (DataDict.WfProcessStatus.DRAFT.toString().equals(bomModel.getStatus())) {
@@ -108,6 +109,11 @@ public class WorkflowService implements IWorkflowService {
             processInstanceService.save(updateWfProcessInstance);
         }
 
+        // 开始节点自动通过
+        Task first = taskService.createTaskQuery().singleResult();
+        WfBaseTaskDTO model = new WfBaseTaskDTO();
+        model.setTaskId(first.getId());
+        completeTask(model);
         logger.info("启动流程结束...");
         return bomModel;
     }
@@ -133,8 +139,23 @@ public class WorkflowService implements IWorkflowService {
     }
 
     @Override
-    public void completeTask(WfBaseTaskDTO model) throws Exception {
+    public WfBaseTaskDTO completeTask(WfBaseTaskDTO model) {
+        logger.info("处理任务开始:taskId=" + model.getTaskId());
+        Task task = taskService.createTaskQuery().taskId(model.getTaskId()).singleResult();
+        HashMap variables = new HashMap();
+        variables.put("bom", model.getBom());
+        variables.put("opinion", model.getOpinion());
+        // 下一节点处理人
+        variables.put("users", model.getSelectAssigneeList());
+        if(model.getAttribute() != null && model.getAttribute().size() > 0) {
+            variables.putAll(model.getAttribute());
+        }
 
+        Map<String, Object> map = taskService.getVariables(task.getId());
+        map.putAll(variables);
+        taskService.complete(model.getTaskId(), variables);
+        logger.info("处理任务结束...");
+        return null;
     }
 
     @Override

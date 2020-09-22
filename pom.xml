@@ -94,8 +94,6 @@
 			<artifactId>activiti-json-converter</artifactId>
 			<version>${activiti.json.converter.version}</version>
 		</dependency>
-
-		<!--junit 5 和 intellij 不兼容-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -107,11 +105,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>junit</groupId>-->
-			<!--<artifactId>junit</artifactId>-->
-			<!--<scope>test</scope>-->
-		<!--</dependency>-->
 	</dependencies>
 
 	<build>

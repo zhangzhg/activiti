@@ -61,7 +61,7 @@ public interface IWorkflowService {
      *
      * @param model
      */
-    void completeTask(WfBaseTaskDTO model) throws Exception;
+    WfBaseTaskDTO completeTask(WfBaseTaskDTO model);
 
     /**
      * 驳回任务

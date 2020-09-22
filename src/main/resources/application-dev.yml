@@ -4,13 +4,13 @@ spring:
     username: root
     password: root
   jpa:
-    generate-ddl: false # 自动生成数据库表
+    generate-ddl: true # 自动生成数据库表
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     database: mysql
   activiti:
-    database-schema-update: false # 自动生成数据库表
+    database-schema-update: true # 自动生成数据库表
     check-process-definitions: false
     serialize-p-o-j-os-in-variables-to-json: true
     db-history-used: true

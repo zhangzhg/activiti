@@ -3,9 +3,9 @@
   <process id="leaveProcess" isClosed="false" isExecutable="true" name="请假流程" processType="None">
     <startEvent activiti:formKey="{&quot;bomModel&quot;:&quot;bomLeave&quot;}" id="_2" name="StartEvent"/>
     <userTask activiti:assignee="${startUser.id}" activiti:exclusive="true" activiti:formKey="{&quot;bomModel&quot;:&quot;bomLeave&quot;,&quot;operations&quot;:[&quot;109&quot;]}" id="_3" name="发起节点"/>
-    <userTask activiti:exclusive="true" id="_4" name="主管审批">
-      <multiInstanceLoopCharacteristics activiti:elementVariable="assignee" isSequential="false">
-        <completionCondition><![CDATA[${completeService.isComplete(execution, opinion)}]]></completionCondition>
+    <userTask activiti:assignee="${user}" activiti:exclusive="true" id="_4" name="主管审批">
+      <multiInstanceLoopCharacteristics activiti:collection="${completeService.userList(execution)}" activiti:elementVariable="user" isSequential="false">
+        <completionCondition>${completeService.isComplete(execution)}</completionCondition>
       </multiInstanceLoopCharacteristics>
     </userTask>
     <userTask activiti:exclusive="true" id="_5" name="领导审批"/>
