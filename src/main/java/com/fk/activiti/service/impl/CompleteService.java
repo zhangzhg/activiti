@@ -54,8 +54,9 @@ public class CompleteService implements ICompleteService {
     }
 
     @Override
-    public void complete(BaseBomModel bomModel) {
-        // // TODO: 2020/9/22 0022  
+    public void complete(DelegateExecution execution) {
+        BaseBomModel bomModel = (BaseBomModel) execution.getVariable("bom");
+        // // TODO: 2020/9/22 0022
         logger.info("流程结束：{}", bomModel.getId());
     }
 }

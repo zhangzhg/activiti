@@ -18,7 +18,7 @@
     </sequenceFlow>
     <endEvent id="_11" name="EndEvent">
       <extensionElements>
-        <activiti:executionListener event="end" expression="${completeService.complete(bom)}"/>
+        <activiti:executionListener event="end" expression="${completeService.complete(execution)}"/>
       </extensionElements>
     </endEvent>
     <sequenceFlow id="_12" name="请假时间少于2天" sourceRef="_8" targetRef="_11">

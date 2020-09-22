@@ -8,7 +8,7 @@ import java.util.List;
 public interface ICompleteService {
     boolean isComplete(DelegateExecution execution);
 
-    void complete(BaseBomModel bomModel);
+    void complete(DelegateExecution execution);
 
     List<String> userList(DelegateExecution execution);
 }
