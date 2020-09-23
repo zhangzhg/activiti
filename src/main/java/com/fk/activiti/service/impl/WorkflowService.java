@@ -1,6 +1,7 @@
 package com.fk.activiti.service.impl;
 
-import com.fk.activiti.command.GotoFirstNodeCmd;
+import com.fk.activiti.command.RejectTaskCmd;
+import com.fk.activiti.command.RejectToStartCmd;
 import com.fk.activiti.domain.BaseBomModel;
 import com.fk.activiti.dto.WfBaseTaskDTO;
 import com.fk.activiti.mapper.ProcessDefinitionMapper;
@@ -206,7 +207,24 @@ public class WorkflowService implements IWorkflowService {
 
     @Override
     public void rejectTask(WfBaseTaskDTO model) throws Exception {
-        logger.info("驳回任务开始:taskId={}", model.getTaskId());
+        String taskId = model.getTaskId();
+        logger.info("驳回任务开始:taskId={}", taskId);
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (ObjectUtils.isEmpty(task)) {
+            throw new BusinessException("找不到相关任务");
+        }
+
+        RejectTaskCmd cmd = new RejectTaskCmd(taskId);
+        processEngine.getManagementService().executeCommand(cmd);
+
+        List<Task> list = taskService.createTaskQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .list();
+
+        // 删除掉任务
+        for (Task t : list) {
+            taskService.deleteTask(t.getId(), "任务驳回");
+        }
 
         logger.info("驳回任务结束...");
     }
@@ -220,7 +238,7 @@ public class WorkflowService implements IWorkflowService {
             throw new BusinessException("找不到相关任务");
         }
 
-        GotoFirstNodeCmd cmd = new GotoFirstNodeCmd(taskId);
+        RejectToStartCmd cmd = new RejectToStartCmd(taskId);
         processEngine.getManagementService().executeCommand(cmd);
 
         List<Task> list = taskService.createTaskQuery()

@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class GotoFirstNodeCmd extends NeedsActiveTaskCmd<Void> {
-    private static Logger logger = LoggerFactory.getLogger(GotoFirstNodeCmd.class);
+public class RejectToStartCmd extends NeedsActiveTaskCmd<Void> {
+    private static Logger logger = LoggerFactory.getLogger(RejectToStartCmd.class);
 
-    public GotoFirstNodeCmd(String taskId) {
+    public RejectToStartCmd(String taskId) {
         super(taskId);
     }
 
