@@ -34,7 +34,7 @@ public class WfProcessInstance extends BaseModel implements Serializable {
     private String businessUrl;
 
     //流程实例ID
-    @Column(name="procinst_id")
+    @Column(name="proc_inst_id")
     private String procInstId;
 
     //流程定义ID

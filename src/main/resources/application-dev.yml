@@ -7,6 +7,7 @@ spring:
     generate-ddl: true # 自动生成数据库表
     show-sql: true
     hibernate:
+
       ddl-auto: create
     database: mysql
   activiti:

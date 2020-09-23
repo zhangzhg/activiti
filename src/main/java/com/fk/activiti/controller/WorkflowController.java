@@ -31,8 +31,18 @@ public class WorkflowController {
         return workflowService.completeTask(model);
     }
 
+    @RequestMapping("/rejectToFirst")
+    public void rejectToFirst(WfBaseTaskDTO model) throws Exception {
+        workflowService.rejectToStartTask(model);
+    }
+
     @RequestMapping("/tasks")
     public List<TaskInfo> taskList(WfProcessTaskDTO model) throws Exception {
         return processTaskService.taskList(model);
+    }
+
+    @RequestMapping("/his/tasks")
+    public List<TaskInfo> taskHisList(WfProcessTaskDTO model) throws Exception {
+        return processTaskService.taskHisList(model);
     }
 }

@@ -28,13 +28,13 @@ public class BaseBomModel extends BaseModel {
     private String status;
 
     // 人工选择的下一环节处理人集合
-    private List<TaskExecutor> selectAssigneeList;
+    private List<String> selectAssigneeList;
 
-    public List<TaskExecutor> getSelectAssigneeList() {
+    public List<String> getSelectAssigneeList() {
         return selectAssigneeList;
     }
 
-    public void setSelectAssigneeList(List<TaskExecutor> selectAssigneeList) {
+    public void setSelectAssigneeList(List<String> selectAssigneeList) {
         this.selectAssigneeList = selectAssigneeList;
     }
 

@@ -25,4 +25,9 @@ public class ProcessInstanceService implements IProcessInstanceService {
     public void save(WfProcessInstance instance) {
         repository.save(instance);
     }
+
+    @Override
+    public WfProcessInstance findByProcInsId(String processInstanceId) {
+        return repository.findByProcInstId(processInstanceId);
+    }
 }

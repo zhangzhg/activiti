@@ -8,4 +8,6 @@ public interface IProcessInstanceService {
     WfProcessInstance findById(String id);
 
     void save(WfProcessInstance instance);
+
+    WfProcessInstance findByProcInsId(String processInstanceId);
 }

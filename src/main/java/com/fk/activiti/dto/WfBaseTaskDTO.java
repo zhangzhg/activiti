@@ -18,15 +18,15 @@ public class WfBaseTaskDTO {
     private String opinion;
 
     // 人工选择的下一环节处理人集合
-    private List<TaskExecutor> selectAssigneeList;
+    private List<String> selectAssigneeList;
     // 其他属性变量
     private Map<String,Object> attribute;
 
-    public List<TaskExecutor> getSelectAssigneeList() {
+    public List<String> getSelectAssigneeList() {
         return selectAssigneeList;
     }
 
-    public void setSelectAssigneeList(List<TaskExecutor> selectAssigneeList) {
+    public void setSelectAssigneeList(List<String> selectAssigneeList) {
         this.selectAssigneeList = selectAssigneeList;
     }
 

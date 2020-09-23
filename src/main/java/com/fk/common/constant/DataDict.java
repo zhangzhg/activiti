@@ -458,7 +458,6 @@ public interface DataDict {
 	 * 驳回流程-消息通知任务状态
 	 */
 	 enum WfNoticeTaskStatus{
-
            TODO("1", "待办"),
            DONE("2", "已办"),
            CLAIM("3", "签收"),
@@ -488,18 +487,18 @@ public interface DataDict {
 	/**
 	 * 流程代理-代理状态
 	 */
-	 enum WfAgentStatus{
-
+	 enum WfInsStatus{
            TO_START("0", "未开始"),
            RUNNING("1", "进行中"),
            END("2", "结束"),
-           STOP("3", "终止");
+           STOP("3", "终止"),
+           DELETED("4", "进行中"),;
 
            private final String code;
 
            private final String name;
 
-           private WfAgentStatus(String code, String name) {
+           private WfInsStatus(String code, String name) {
                this.code = code;
                this.name = name;
            }
@@ -566,7 +565,6 @@ public interface DataDict {
 	 * 流程分管授权-流程日志
 	 */
 	 enum WfProcessOperLogType{
-
            START_PROCESS("startProcess", "启动"),
            END_PROCESS("endProcess", "结束"),
            SUSPEND_PROCESS("suspendProcess", "挂起"),
