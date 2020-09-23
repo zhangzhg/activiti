@@ -2,7 +2,6 @@ package com.fk.activiti.service.impl;
 
 import com.fk.activiti.command.GotoFirstNodeCmd;
 import com.fk.activiti.domain.BaseBomModel;
-import com.fk.activiti.domain.TaskExecutor;
 import com.fk.activiti.dto.WfBaseTaskDTO;
 import com.fk.activiti.mapper.ProcessDefinitionMapper;
 import com.fk.activiti.model.ActivitiUser;
@@ -18,7 +17,6 @@ import org.activiti.engine.*;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskInfoQuery;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class WorkflowService implements IWorkflowService {
