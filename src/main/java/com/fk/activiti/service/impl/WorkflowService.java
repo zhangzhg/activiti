@@ -247,7 +247,6 @@ public class WorkflowService implements IWorkflowService {
         return null;
     }
 
-
     private WfBaseTaskDTO getStartModel(Task first, BaseBomModel bomModel) {
         WfBaseTaskDTO model = new WfBaseTaskDTO();
         List<String> list = bomModel.getSelectAssigneeList();
