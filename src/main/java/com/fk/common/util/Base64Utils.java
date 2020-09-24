@@ -21,17 +21,22 @@ public class Base64Utils {
      * @throws IOException
      */
     public static String inputStreamToBase64(InputStream input) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        int len = 0;
-        byte[] b = new byte[1024];
-        while ((len = input.read(b, 0, b.length)) != -1) {
-            byteArrayOutputStream.write(b, 0, len);
+        String base64;
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            int len;
+            byte[] b = new byte[1024];
+            while ((len = input.read(b, 0, b.length)) != -1) {
+                byteArrayOutputStream.write(b, 0, len);
+            }
+            byte[] buffer = byteArrayOutputStream.toByteArray();
+            base64 = new BASE64Encoder().encode(buffer);
+            base64 = org.apache.commons.lang3.StringUtils.replace(org.apache.commons.lang3.StringUtils.replace(base64, "\r", ""), "\n", "");
+            byteArrayOutputStream.close();
+        } finally {
+            input.close();
         }
-        byte[] buffer = byteArrayOutputStream.toByteArray();
-        String base64 = new BASE64Encoder().encode(buffer);
-        base64 = org.apache.commons.lang3.StringUtils.replace(org.apache.commons.lang3.StringUtils.replace(base64, "\r", ""), "\n", "");
-        byteArrayOutputStream.close();
-        input.close();
+
         return base64;
     }
 

@@ -91,6 +91,12 @@
 
 		<dependency>
 			<groupId>org.activiti</groupId>
+			<artifactId>activiti-image-generator</artifactId>
+			<version>7.0.0.SR1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.activiti</groupId>
 			<artifactId>activiti-json-converter</artifactId>
 			<version>${activiti.json.converter.version}</version>
 		</dependency>

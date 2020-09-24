@@ -255,13 +255,13 @@ public class WorkflowService implements IWorkflowService {
 
     @Override
     public void saveBom(String taskId, BaseBomModel model) {
-        taskService.setVariableLocal(taskId, "bom", model);
+        taskService.setVariable(taskId, "bom", model);
     }
 
     @Override
     public Object findBom(String taskId) {
         if (taskService.createTaskQuery().taskId(taskId).singleResult() != null) {
-            return taskService.getVariableLocal(taskId, "bom");
+            return taskService.getVariable(taskId, "bom");
         }
         return null;
     }
