@@ -1,5 +1,6 @@
 package com.fk.activiti.service.impl;
 
+import com.fk.activiti.diagram.DiagramGenerator;
 import com.fk.activiti.dto.TaskInfo;
 import com.fk.activiti.dto.WfProcessTaskDTO;
 import com.fk.activiti.mapper.ProcessTaskMapper;
@@ -110,7 +111,7 @@ public class ProcessTaskService implements IProcessTaskService {
         String processDefId = task.getProcessDefinitionId();
         BpmnModel model = repositoryService.getBpmnModel(processDefId);
         // 自动生成图
-        ProcessDiagramGenerator generator = new DefaultProcessDiagramGenerator();
+        DiagramGenerator generator = new DiagramGenerator();
 
         String fontName = "宋体";
         // 生成图
@@ -120,6 +121,7 @@ public class ProcessTaskService implements IProcessTaskService {
                 fontName,
                 fontName,
                 fontName);
+
         // 根据模型生成图
         return inputStream;
     }
