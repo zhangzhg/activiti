@@ -139,7 +139,10 @@ public class WorkflowService implements IWorkflowService {
 
         Map<String, Object> map = taskService.getVariables(task.getId());
         map.putAll(variables);
-        taskService.addComment(model.getTaskId(), null, model.getDescription());
+        if (StringUtils.isNotBlank(model.getDescription())) {
+            taskService.addComment(model.getTaskId(), null, model.getDescription());
+        }
+
         taskService.complete(model.getTaskId(), variables);
         // 修改流程状态，
         WfProcessInstance ins = processInstanceService.findByProcInsId(task.getProcessInstanceId());

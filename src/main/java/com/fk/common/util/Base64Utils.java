@@ -31,7 +31,7 @@ public class Base64Utils {
             }
             byte[] buffer = byteArrayOutputStream.toByteArray();
             base64 = new BASE64Encoder().encode(buffer);
-            base64 = org.apache.commons.lang3.StringUtils.replace(org.apache.commons.lang3.StringUtils.replace(base64, "\r", ""), "\n", "");
+            base64 = StringUtils.replace(StringUtils.replace(base64, "\r", ""), "\n", "");
             byteArrayOutputStream.close();
         } finally {
             input.close();

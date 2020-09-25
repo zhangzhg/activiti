@@ -15,12 +15,14 @@ import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskInfoQuery;
 import org.activiti.image.ProcessDiagramGenerator;
 import org.activiti.image.impl.DefaultProcessDiagramGenerator;
+import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,8 +86,19 @@ public class ProcessTaskService implements IProcessTaskService {
     @Override
     public InputStream getDiagram(String taskId) {
         org.activiti.engine.task.TaskInfo task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        List<String> activeActivityIds = new ArrayList<>();
         if (ObjectUtils.isEmpty(task)) {
             task = historyService.createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
+            List<HistoricActivityInstance> his = historyService.createHistoricActivityInstanceQuery()
+                    .processInstanceId(task.getProcessInstanceId())
+                    .finished()
+                    .orderByHistoricActivityInstanceEndTime()
+                    .desc()
+                    .list();
+            activeActivityIds.add(his.get(0).getActivityId());
+        } else {
+            // 高亮节点
+            activeActivityIds = processEngine.getRuntimeService().getActiveActivityIds(task.getExecutionId());
         }
 
         // 找不到任务节点
@@ -99,11 +112,14 @@ public class ProcessTaskService implements IProcessTaskService {
         // 自动生成图
         ProcessDiagramGenerator generator = new DefaultProcessDiagramGenerator();
 
-        // 高亮节点
-        List<String> activeActivityIds = processEngine.getRuntimeService().getActiveActivityIds(task.getExecutionId());
-
-        // 生产图
-        InputStream inputStream = generator.generateDiagram(model, activeActivityIds);
+        String fontName = "宋体";
+        // 生成图
+        InputStream inputStream = generator.generateDiagram(model,
+                activeActivityIds,
+                Collections.emptyList(),
+                fontName,
+                fontName,
+                fontName);
         // 根据模型生成图
         return inputStream;
     }
